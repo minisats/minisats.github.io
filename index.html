@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Minisats by minisats</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Minisats</h1>
+        <p class="header">A transparent bitcoin banking platform</p>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/minisats/minisats/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/minisats/minisats/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/minisats/minisats">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/minisats">minisats</a></p>
+
+
+      </header>
+      <section>
+        <h2>
+<a name="introduction-and-overview" class="anchor" href="#introduction-and-overview"><span class="octicon octicon-link"></span></a>Introduction and Overview:</h2>
+
+<p>I am beginning a project I would like to dedicate my time to. It will be open-source, welcoming both forking and contribution. I believe it will serve an unimaginable number of uses. This might be a bit of a wall of text, but I'd rather be clear than catchy. I'm looking for any criticism, comments, questions, and contributions. <strong>There's a TL;DR at the end.</strong> Here's the idea:</p>
+
+<p>At the most basic level, I'd like to create an open-source, totally-transparent, provably secure and trustworthy anonymous bitcoin bank. As awesome as it is to have the first peer-to-peer success of Bitcoin's magnitude, there are SOME innate perks to a centralized system that we can harness. I believe that if we built a centralized system that was <em>provably</em> open and just wrapped it as closely to the Bitcoin ideals as we could, we could get something pretty cool.</p>
+
+<p>A user goes to the site. They request a new account, and two things happen. First, it generates a deposit address for them to send bitcoins to; second, it asks for an address they own. In order to do anything with the bank, they have to send both the command and the <em>signed</em> command to the bank. In this way, the user can control their account without ever revealing their private key to anyone, even the bank. The process may seem a little awkward, but this is designed to be securely handled by a trusted client-side program.</p>
+
+<h2>
+<a name="tips" class="anchor" href="#tips"><span class="octicon octicon-link"></span></a>Tips:</h2>
+
+<p>Once the account has funds, you can send a tip to any other user. You can also send to any Bitcoin address, which will create an account for that address and just hold the funds until someone with the corresponding private key does something with them. A tip is instantaneous and irreversible. A tip consists of:</p>
+
+<ul>
+<li><p>An amount of bitcoins, with more precision than a satoshi. A transaction can deal with millisatoshis, microsatoshis, etc. I'm using the umbrella-term "minisats" for the sub-satoshi denominations.</p></li>
+<li><p>A memo, which would support an html-like markup language, capable of referencing other tips, other accounts, or just a general link. It will support small messages or links to larger media.</p></li>
+<li><p>(further on in development) "custom tip behavior", which will be modeled after <a href="https://en.bitcoin.it/wiki/Contracts">bitcoin contracts</a>. Contracts are currently dormant in the Bitcoin protocol, but offer some really interesting tools.</p></li>
+</ul><p>Each tip will cost a <strong>very</strong> small amount of minisats: something more comparable to a coin's ridges rubbing off after use than a credit card's transaction fees. This will be targetted to exactly pay off the server cost of managing the new information. It's hard to articulate the scale I'm talking here, but you'd have to be sending an insane number of tips for this to affect you in any significant way, and will be far, far less than the transaction fee associated with using the Bitcoin network directly. At the same time, it will basically prevent a ddos attack or spam from being "worth it" from the spammer's perspective.</p>
+
+<h2>
+<a name="data-analysis" class="anchor" href="#data-analysis"><span class="octicon octicon-link"></span></a>Data Analysis:</h2>
+
+<p>There will be an exposed interface for viewing the tip history database, possibly just as simple as exposing part of an sql SELECT statement to the user. This will also be designed as a backend for other open-source tools built to access it. To run queries, a user must use an account with some small balance; queries will require some small amount of minisats again targetted to exactly pay off the rough cost of the query in terms of server processing time. This will encourage optimized queries over data-combing; a programmer with a bit of time should always find it affordable to run simple queries even if monolithic entities are running huge data-combing operations. The price will scale along with server demand, so we are always at peak perfromance without crashing. (I'm also considering publicly logging all data searching; what do you guys think about this?)</p>
+
+<p>The culture surrounding this data availability will be like Facebook or Myspace, in that all of the information you could find has been uploaded with the understanding that it was public. This will, by the way, be an excellent way of demonstrating to new cryptocurrency users exactly what "public yet anonymous" means, and show them the ins and outs of this new set of rules and consequences.</p>
+
+<h3>
+<a name="example-applications-of-data-analysis" class="anchor" href="#example-applications-of-data-analysis"><span class="octicon octicon-link"></span></a>Example applications of data analysis:</h3>
+
+<h4>
+<a name="consider-the-following-algorithm-that-a-client-could-perform" class="anchor" href="#consider-the-following-algorithm-that-a-client-could-perform"><span class="octicon octicon-link"></span></a>Consider the following algorithm that a client could perform:</h4>
+
+<p>Given an account id, it will find its biggest sent tips, return the info (from id, to id, amount, memo), limiting by saying something like "activity last week". Then take that pool of accounts, and repeat the process with their combined tips matching similar criteria. Continue for some small number of loops.</p>
+
+<p>Now fill in the blanks with some examples. The account was your neighbor Joe's public account. Oh, he donated to that space program. Oh, he sent a few millisats to some other dude with the memo "for homegrown carrots. tasted great, thanks!". When the loop iterates again, you'll be reading about your acquaintances' biggest public expenditures. No matter how many loops you iterate through, you're always guaranteed a real person, not a spammer, because you're only getting to people who have done something to receive a tip from someone you trust, at least vicariously. Imagine knowing in an instant every restaurant review your friends have ever had in an instant by only searching the memo field for "restaurant", "food", or "delicious", and specifying only 2 or 3 degrees of separation. Imagine searching instead for the keywords "amazing" "vacation", and "travel", and letting it iterate through a few degrees of separation. Great travel ideas, just like that, pre-sorted in terms of how much your friends vicariously valued the comment. It will be like a subreddit for your life.</p>
+
+<p>I'm sitting at home, up late becuase I can't sleep, and bored. My stoner friend calls me up and says he REALLY needs some pizza but he can't DRIVE and he has some BITCOINS that could be mine. I'm bored anyway, and I could use some more money, so I accept. When I get back home, I see he's tipped me with the memo "that pizza was awesome. thanks for the delivery man". A day or so later, I see I've received a tip (maybe with no money, maybe with a few microsats, maybe more) with the memo "I see you delivered pizza last night super late. Would you mind delivering to my address for XX bitcoins/satoshis?" He explains that he knows my stoner friend's friend, and he came across the first tip when searching for "pizza delivery". If the price is right, I agree. If not, I ignore it or make a counter-offer. And suddenly, with no effort on my part, I have the opportunity to begin delivering pizzas for profit.</p>
+
+<p>Find yourself often killing time in town? Start taxiing your friends around for bitcoins, and soon their friends will be calling you up for rides. No money to pay for food tonight? I bet you could find someone who'd pay you to mow their lawn or shovel their driveway. Start with your friends, and branching out will be easy, with almost any line of work. If you do what you're good at people will pay you to do it again, and specialization will become as natural as breathing.</p>
+
+<p>And beyond things that are just convenient for you to do, consider all the things that you <em>like</em> to do. Let's say that you like working with small <a href="http://en.wikipedia.org/wiki/Quadrotor">quadrotos</a>, so you get one and start messing with it. One day you are able to program it to do something cool, so you make a video and post it somewhere associated with your account. If your friends think it's cool, they'll tip you for it, which both funds you <em>and</em> makes <em>their</em> friends more likely to hear about it. The cooler your video is, the more money you get from it, first from friends and then from strangers--and one day you could find that you have an ongoing crowdsourced fundraiser, moving enough money to you to buy a few more quadrotors and start working on <a href="http://www.youtube.com/watch?v=pp89tTDxXuI">something like this</a>. The sky is the limit with this kind of growth, and the better you are at it the better this will work. And besides the money you'd get, you can browse the tips with any number of algorithms, finding the most constructive criticism quickly in the same way you can do so on Reddit.</p>
+
+<p>This kind of thinking applies to <em>anything</em>. I believe that one day, with Bitcoin, restaraunts will fall to the people who just like to cook; specialty book stores will fall to people who like weird books; schools will fall to tutors and apprenticeships. I think this tool is the next step toward that. Why go to college for an engineering degree when you could instead just find and pay an engineer to let you shadow him for a day/week/month? Why take an internship when you could just impress that guy with your knowledge? If you pay attention and you're a smart kid, one day you'll find that he's willing to pay you to show up to work and tell him what you think. Why would an engineering firm hire a graduate when they've seen that your mentor (their associate through some degrees of separation) tipped you a significant portion of a payment for catching an important detail? All you have to do is do what you love as long as it's worth your time, and you'll find your place in the world.</p>
+
+<p>I could go on and on about the amazing things this system could do, but if you're still reading this then you probably get the basic idea by now. I'm mainly posting here because I could use some help, and I'm hoping that this idea is exciting to someone else who can contribue to parts of the project that I'm less able to.</p>
+
+<p>I can immediately start on the database manipulation and bitcoin handling, and when that's done I'm going to start on a basic AJAX interface, assuming no one has already begun making better interface tools. If anyone else is interested in contributing their skills, we'll need:</p>
+
+<ul>
+<li><p>At least one cryptology expert</p></li>
+<li><p>People willing to work on interface tools; on one hand the database searching, and on the other hand the tip/account management. I'd also like to see a basic tool that handles them both.</p></li>
+</ul><p>It would really help to have:</p>
+
+<ul>
+<li><p>Some well-known community member(s) getting involved to more easily prove project honesty/openness.</p></li>
+<li><p>Other people setting up their own servers with variants to see which systems and settings work better</p></li>
+<li><p>More ideas on how to make this <em>provably</em> honest and open. It will be trivial to prove the server <em>has</em> been honest, but I haven't yet figured out to prove that it <em>will</em> be honest.</p></li>
+<li><p>Users, ideally with friends to bring in to start building networks and dialogues.</p></li>
+<li><p>Finally, if you love this idea but can't help with ability or time, bitcoins are of course always welcome. I can coast for a while and dedicate my time to this project, but one day bills will come to take me away from this. You can bitcointip me, or my bitcoin address is 17BrEsAs2TY5PkgcyPWyNt2AyenBNTPcJr; depending on the activity of this project, tips will either go toward hiring more talent, tipping good contributions, or paying for my next batch of top ramen and internet bills. Keep in mind that if you'd rather not depend on my honesty, you can always find some other contributor to donate to. Once the ball gets rolling a bit more, I'm sure we'll set up a general donation address.</p></li>
+</ul><p>Alright guys. Sorry for the wall of text. I hope some of you get as excited about this as I am. I'm going to be watching this and responding when I can, and unless the feedback is such that the idea changes rapidly, I'm going to start on the project either today or tomorrow.</p>
+
+<p><strong>TL;DR: Minisats will be a centralized but 100% transparent online bitcoin bank capable of regular-sized or incredibly small micropayments with memos called "tips", and the tips database will be searchable to an extent that will allow an incredible range of uses and, I truly believe, usher in a new era of social interaction like we can't imagine.</strong></p>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
